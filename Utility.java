@@ -4,7 +4,7 @@ public class Utility {
     public final static int MakingFriesTime = 3000;
     public final static int MakingCokeTime = 1000;
 
-    public static Object Busy = new Object();
+    public static Object MachineBusy = new Object();
     public static RepositoryFactory Repository = new RepositoryFactory();
 
     private final static long beginSecond = System.currentTimeMillis() / 1000;

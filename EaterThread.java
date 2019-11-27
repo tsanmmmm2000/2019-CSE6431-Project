@@ -19,7 +19,7 @@ public class EaterThread implements Runnable {
         seat();
         eat();
         leave();
-        finish();
+        //finish();
     }
     
     private void arrive() {
@@ -60,16 +60,16 @@ public class EaterThread implements Runnable {
             // wait order
             synchronized (eater) {
                 eater.wait(); 
+
+                // eating
+                System.out.println(String.format(
+                    "%s - Diner %s's order is ready. Diner %s starts eating.", 
+                    Utility.calculateTime(),
+                    eater.getId(),
+                    eater.getId()));
+
+                Thread.sleep(Utility.EatingTime);
             }
-
-            // eating
-            System.out.println(String.format(
-                "%s - Diner %s's order is ready. Diner %s starts eating.", 
-                Utility.calculateTime(),
-                eater.getId(),
-                eater.getId()));
-
-            Thread.sleep(Utility.EatingTime);
 
         } catch (InterruptedException ex) {
             ex.printStackTrace();

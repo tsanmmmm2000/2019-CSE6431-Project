@@ -57,94 +57,99 @@ public class CookThread implements Runnable {
             
             while (total > 0) {
 
+                synchronized (Utility.MachineBusy) {
 
-                while((burgerMachine.isUsing() || order.getBurgersNumber() <= 0) 
-                    && (friesMachine.isUsing() || order.getFriesNumber() <= 0)
-                    && (cokeMachine.isUsing() || order.getCokeNumber() <= 0)) {
-                    
-                    synchronized (Utility.Busy) {
-                        Utility.Busy.wait();
-                    }
-                }
-                
-
-                if (!burgerMachine.isUsing() && order.getBurgersNumber() > 0) {
-                    
-                    while (order.getBurgersNumber() > 0) {
-                        System.out.println(String.format(
-                            "%s - Cook %s uses the burger machine.", 
-                            Utility.calculateTime(), 
-                            cook.getId()));
+                    while((burgerMachine.isUsing() || order.getBurgersNumber() <= 0) 
+                        && (friesMachine.isUsing() || order.getFriesNumber() <= 0)
+                        && (cokeMachine.isUsing() || order.getCokeNumber() <= 0)) {
                         
-                        burgerMachine.use(order);
+                            Utility.MachineBusy.wait();
+                    }
+                }
+           
+                // should synchronized two objects: burgerMachine and order
+                synchronized(burgerMachine) {
 
+                    if (!burgerMachine.isUsing() && order.getBurgersNumber() > 0) {
+                    
+                        while (order.getBurgersNumber() > 0) {
+                            System.out.println(String.format(
+                                "%s - Cook %s uses the burger machine.", 
+                                Utility.calculateTime(), 
+                                cook.getId()));
+                            
+                            burgerMachine.use(order);
             
-                        Thread.sleep(Utility.MakingBurgerTime);
-
-                        if (order.getBurgersNumber() == 0) {
-                            burgerMachine.release();
-
-                            synchronized (Utility.Busy){
-                                Utility.Busy.notifyAll();
-                            }                        
+                            Thread.sleep(Utility.MakingBurgerTime);
                         }
+                        burgerMachine.release();
+                        
+                        synchronized (Utility.MachineBusy){
+                            Utility.MachineBusy.notifyAll();
+                        }
+                                                
                     }
                 }
+                                              
+                synchronized(friesMachine) {
 
-                if (!friesMachine.isUsing() && order.getFriesNumber() > 0) {
-                    
-                    while (order.getFriesNumber() > 0) {
+                    if (!friesMachine.isUsing() && order.getFriesNumber() > 0) {
 
-                        System.out.println(String.format(
-                            "%s - Cook %s uses the fries machine.", 
-                            Utility.calculateTime(), 
-                            cook.getId()));   
+                        while (order.getFriesNumber() > 0) {
 
-                        friesMachine.use(order);
+                            System.out.println(String.format(
+                                "%s - Cook %s uses the fries machine.", 
+                                Utility.calculateTime(), 
+                                cook.getId()));   
 
-                       Thread.sleep(Utility.MakingFriesTime);
+                            friesMachine.use(order);
 
-                        if (order.getFriesNumber() == 0) {
-                            friesMachine.release();
-                            synchronized (Utility.Busy){
-                                Utility.Busy.notifyAll();
-                            }                             
-                        }                       
+                            Thread.sleep(Utility.MakingFriesTime);
+                                                
+                        }
+                        friesMachine.release();
+                        
+                        synchronized (Utility.MachineBusy){
+                            Utility.MachineBusy.notifyAll();
+                        }                        
+                        
                     }
                 }
+                                                        
 
+                synchronized(cokeMachine) {
+   
+                    if (!cokeMachine.isUsing() && order.getCokeNumber() > 0) {
 
-                if (!cokeMachine.isUsing() && order.getCokeNumber() > 0) {
-                    
-                    while (order.getCokeNumber() > 0) {
+                        while (order.getCokeNumber() > 0) {
 
-                        System.out.println(String.format(
-                            "%s - Cook %s uses the coke machine.", 
-                            Utility.calculateTime(), 
-                            cook.getId()));   
+                            System.out.println(String.format(
+                                "%s - Cook %s uses the coke machine.", 
+                                Utility.calculateTime(), 
+                                cook.getId()));   
 
-                        cokeMachine.use(order);
+                            cokeMachine.use(order);
 
-                        Thread.sleep(Utility.MakingCokeTime);
-
-                        if (order.getCokeNumber() == 0) {
-                            cokeMachine.release();
-
-                            synchronized (Utility.Busy){
-                                Utility.Busy.notifyAll();
-                            }                             
-                        }                       
-                    }           
+                            Thread.sleep(Utility.MakingCokeTime);                      
+                        }
+                        cokeMachine.release();
+                        
+                        synchronized (Utility.MachineBusy){
+                            Utility.MachineBusy.notifyAll();
+                        }
+                                            
+                    }
                 }
-
-
+               
                 // finish order
-                total = order.getBurgersNumber() 
-                    + order.getFriesNumber() 
-                    + order.getCokeNumber();
-                if (total == 0) {
-                    synchronized (eater) {
+                synchronized (eater) {
+
+                    total = order.getBurgersNumber() 
+                        + order.getFriesNumber() 
+                        + order.getCokeNumber();
+                    if (total == 0) {
                         eater.notify();
+                        
                     }
                 }
             }

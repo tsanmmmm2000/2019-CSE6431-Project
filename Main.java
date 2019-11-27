@@ -7,8 +7,8 @@ public class Main {
         // init eaters information
         Eater[] eaters = new Eater[eatersNumber];
         eaters[0] = new Eater(1, 5);
-        eaters[1] = new Eater(2, 6);
-        eaters[2] = new Eater(3, 7);
+        eaters[1] = new Eater(2, 10);
+        eaters[2] = new Eater(3, 60);
 
         Order[] orders = new Order[eatersNumber];
         orders[0] = new Order(1, 1, 1);
