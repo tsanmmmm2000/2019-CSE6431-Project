@@ -1,38 +1,24 @@
+import java.util.*;
+
 public class Order {
-    private int burgersNumber;
-    private int friesNumber;
-    private int cokeNumber;
+
     private Table table;
 
-    public Order(int burgersNumber, int friesNumber, int cokeNumber) {
-        this.burgersNumber = burgersNumber;
-        this.friesNumber = friesNumber;
-        this.cokeNumber = cokeNumber;
+    // key: food name
+    // value: food number
+    private HashMap<String, Integer> food;
+
+    public Order(HashMap<String, Integer> food) {
+        this.food = food;
     }
 
-    public int getBurgersNumber() {
-        return burgersNumber;
+    public int getFoodNumber(String name) {
+        return food.getOrDefault(name, 0);
     }
 
-    public void setBurgersNumber(int number) {
-        burgersNumber = number;
-    }
-
-    public int getFriesNumber() {
-        return friesNumber;
-    }
-
-    public void setFriesNumber(int number) {
-        friesNumber = number;
-    }
-
-    public int getCokeNumber() {
-        return cokeNumber;
-    }
-
-    public void setCokeNumber(int number) {
-        cokeNumber = number;
-    }
+    public void setFoodNumber(String name, int number) {
+        food.put(name, number);
+    }    
 
     public Table getTable() {
         return table;

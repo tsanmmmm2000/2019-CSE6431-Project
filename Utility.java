@@ -1,9 +1,6 @@
 public class Utility {
     public final static int EatingTime = 30000;
-    public final static int MakingBurgerTime = 5000;
-    public final static int MakingFriesTime = 3000;
-    public final static int MakingCokeTime = 1000;
-    
+ 
     public static RepositoryFactory Repository = new RepositoryFactory();
 
     private final static long beginSecond = System.currentTimeMillis() / 1000;

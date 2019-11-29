@@ -1,8 +1,15 @@
 public class FriesMachine extends BaseMachine {
 
+    private final int MakingFriesTime = 3000;
+    private final String Fries = "fries";
+
     @Override
-    public void use(Order order) {
-        isUsing = true;
-        order.setFriesNumber(order.getFriesNumber() - 1); 
-    }   
+    public int getMakingTime() {
+        return MakingFriesTime;
+    }
+
+    @Override
+    public String getName() {
+        return Fries;
+    }
 }

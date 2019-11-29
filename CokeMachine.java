@@ -1,8 +1,15 @@
 public class CokeMachine extends BaseMachine {
 
+    private final int MakingCokeTime = 1000;
+    private final String Coke = "coke";
+
     @Override
-    public void use(Order order) {
-        isUsing = true;     
-        order.setCokeNumber(order.getCokeNumber() - 1);           
-    }    
+    public int getMakingTime() {
+        return MakingCokeTime;
+    }
+
+    @Override
+    public String getName() {
+        return Coke;
+    }
 }

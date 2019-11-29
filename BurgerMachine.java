@@ -1,8 +1,15 @@
 public class BurgerMachine extends BaseMachine {
 
+    private final int MakingBurgerTime = 5000;
+    private final String Burger = "burger";
+
     @Override
-    public void use(Order order) {
-        isUsing = true;
-        order.setBurgersNumber(order.getBurgersNumber() - 1);         
-    }  
+    public int getMakingTime() {
+        return MakingBurgerTime;
+    }
+
+    @Override
+    public String getName() {
+        return Burger;
+    }
 }

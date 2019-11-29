@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Main {
     public static void main(String args[]) {
         int eatersNumber = 3;
@@ -10,10 +12,39 @@ public class Main {
         eaters[1] = new Eater(2, 10); // 6 
         eaters[2] = new Eater(3, 60); // 7
 
-        Order[] orders = new Order[eatersNumber];
-        orders[0] = new Order(1, 1, 1);
-        orders[1] = new Order(2, 0, 1);
-        orders[2] = new Order(1, 2, 1);        
+        // init order information
+        List<Machine> machines = Utility.Repository.getMachines();
+        HashMap<String, Integer> food1 = new HashMap<String, Integer>();
+        HashMap<String, Integer> food2 = new HashMap<String, Integer>();
+        HashMap<String, Integer> food3 = new HashMap<String, Integer>();
+        List<Integer> food1Numbers = new ArrayList<Integer>();
+        food1Numbers.add(1);
+        food1Numbers.add(1);
+        food1Numbers.add(1);
+        List<Integer> food2Numbers = new ArrayList<Integer>();
+        food2Numbers.add(2);
+        food2Numbers.add(0);
+        food2Numbers.add(1);
+        List<Integer> food3Numbers = new ArrayList<Integer>();
+        food3Numbers.add(1);
+        food3Numbers.add(2);
+        food3Numbers.add(1);            
+
+        for (int i = 0; i < machines.size(); i++) {
+            String name = machines.get(i).getName();
+            int food1Number = food1Numbers.get(i);
+            int food2Number = food2Numbers.get(i);
+            int food3Number = food3Numbers.get(i);
+            food1.put(name, food1Number);
+            food2.put(name, food2Number);
+            food3.put(name, food3Number);
+        }    
+
+        Order[] orders = new Order[eatersNumber];  
+        orders[0] = new Order(food1);
+        orders[1] = new Order(food2);
+        orders[2] = new Order(food3);
+  
 
         // init cooks information
         Cook[] cooks = new Cook[cooksNumber];

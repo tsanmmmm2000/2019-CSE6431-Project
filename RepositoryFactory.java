@@ -1,17 +1,19 @@
+import java.util.*;
+
 public class RepositoryFactory {
     
     private TableService tableService;
     private OrderService orderService;
-    private BurgerMachine burgerMachine;
-    private FriesMachine friesMachine;
-    private CokeMachine cokeMachine;
+    private List<Machine> machines;
 
     public RepositoryFactory() {
         tableService = new TableService();
         orderService = new OrderService();
-        burgerMachine = new BurgerMachine();
-        friesMachine = new FriesMachine();
-        cokeMachine = new CokeMachine();
+
+        machines = new ArrayList<Machine>();       
+        machines.add(new BurgerMachine());
+        machines.add(new FriesMachine());
+        machines.add(new CokeMachine());
     }
 
     public TableService getTableService() {
@@ -22,15 +24,14 @@ public class RepositoryFactory {
         return orderService;
     }
 
-    public BurgerMachine getBurgerMachine() {
-        return burgerMachine;
+    public List<Machine> getMachines() {
+        return machines;
     }
 
-    public FriesMachine getFriesMachine() {
-        return friesMachine;
-    }
-
-    public CokeMachine getCokeMachine() {
-        return cokeMachine;
-    }         
+    public Machine getMachine(String name) {
+        for (Machine machine : machines) {
+            if (machine.getName().equals(name)) return machine;
+        }
+        return null;
+    }           
 }
