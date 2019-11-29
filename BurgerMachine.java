@@ -1,16 +1,8 @@
-public class BurgerMachine {
-    private boolean isUsing = false;
+public class BurgerMachine extends BaseMachine {
 
-    public boolean isUsing() {
-        return isUsing;
-    }
-
+    @Override
     public void use(Order order) {
         isUsing = true;
         order.setBurgersNumber(order.getBurgersNumber() - 1);         
-    }
-
-    public void release() {
-        isUsing = false;
-    }
+    }  
 }

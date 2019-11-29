@@ -19,7 +19,7 @@ public class EaterThread implements Runnable {
         seat();
         eat();
         leave();
-        //finish();
+        finish();
     }
     
     private void arrive() {
@@ -87,13 +87,21 @@ public class EaterThread implements Runnable {
                 eater.getId()));
 
             tableService.releaseTable(table);
-            tableService.getTables().notify();                
-        }    
+            tableService.getTables().notify();
+        }
+
+        synchronized (Utility.getCurrentEaterNumber()) {
+            Utility.setCurrentEaterNumber(Utility.getCurrentEaterNumber() - 1);
+        }
     }
 
     private void finish() {
-        System.out.println(String.format(
-            "%s - The last diner leaves the restaurant.", Utility.calculateTime()));
-        System.exit(0);
+        synchronized(Utility.getCurrentEaterNumber()) {
+            if (Utility.getCurrentEaterNumber() == 0) {
+                System.out.println(String.format(
+                    "%s - The last diner leaves the restaurant.", Utility.calculateTime()));
+                System.exit(0);
+            }
+        }
     }
 }

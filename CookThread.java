@@ -1,14 +1,14 @@
 public class CookThread implements Runnable {
 
-    private Cook cook;
+    private final Cook cook;
     private Order order;
     private Eater eater;
-    private BurgerMachine burgerMachine;
-    private FriesMachine friesMachine;
-    private CokeMachine cokeMachine;
-    private OrderService orderService;
+    private final BurgerMachine burgerMachine;
+    private final FriesMachine friesMachine;
+    private final CokeMachine cokeMachine;
+    private final OrderService orderService;
 
-    public CookThread(Cook cook) {
+    public CookThread(final Cook cook) {
         this.cook = cook;
         burgerMachine = Utility.Repository.getBurgerMachine();
         friesMachine = Utility.Repository.getFriesMachine();
@@ -16,33 +16,29 @@ public class CookThread implements Runnable {
         orderService = Utility.Repository.getOrderService();
     }
 
-    public void run()
-    {
+    public void run() {
         while (true) {
             take();
             process();
         }
     }
-    
+
     private void take() {
         try {
             // wait order
-            synchronized(orderService.getOrders()) {
+            synchronized (orderService.getOrders()) {
                 while (!orderService.hasOrder()) {
                     orderService.getOrders().wait();
                 }
 
                 order = orderService.takeOrder();
-                Table table = order.getTable();
+                final Table table = order.getTable();
                 eater = table.getEater();
 
-                System.out.println(String.format(
-                    "%s - Cook %s processes Diner %s's order.",
-                    Utility.calculateTime(),
-                    cook.getId(),
-                    eater.getId()));
+                System.out.println(String.format("%s - Cook %s processes Diner %s's order.", Utility.calculateTime(),
+                        cook.getId(), eater.getId()));
             }
-        } catch (InterruptedException ex) {
+        } catch (final InterruptedException ex) {
             ex.printStackTrace();
         }
     }
@@ -50,113 +46,132 @@ public class CookThread implements Runnable {
     private void process() {
         try {
             // process order
-                     
-            int total = order.getBurgersNumber() 
-                + order.getFriesNumber() 
-                + order.getCokeNumber();
-            
+            int total = order.getBurgersNumber() + order.getFriesNumber() + order.getCokeNumber();
             while (total > 0) {
-
-                synchronized (Utility.MachineBusy) {
-
-                    while((burgerMachine.isUsing() || order.getBurgersNumber() <= 0) 
-                        && (friesMachine.isUsing() || order.getFriesNumber() <= 0)
-                        && (cokeMachine.isUsing() || order.getCokeNumber() <= 0)) {
-                        
-                            Utility.MachineBusy.wait();
+  
+                long currentMilliSecond = System.currentTimeMillis();           
+                if (order.getBurgersNumber() > 0) {
+                    if (!burgerMachine.isUsing()) {
+                        long startMilliSecond = currentMilliSecond + (Utility.MakingBurgerTime * order.getBurgersNumber());
+                        burgerMachine.setExpectedFinishTime(Utility.calculateTime(startMilliSecond));                        
+                        makeBurger();
+                    } else {
+                        if (Utility.calculateTime(currentMilliSecond).equals(burgerMachine.getExpectedFinishTime())) {   
+                            synchronized (burgerMachine) {
+                                burgerMachine.wait();
+                            }
+                            makeBurger();
+                        }              
                     }
                 }
-           
-                // should synchronized two objects: burgerMachine and order
-                synchronized(burgerMachine) {
 
-                    if (!burgerMachine.isUsing() && order.getBurgersNumber() > 0) {
-                    
-                        while (order.getBurgersNumber() > 0) {
-                            System.out.println(String.format(
-                                "%s - Cook %s uses the burger machine.", 
-                                Utility.calculateTime(), 
-                                cook.getId()));
-                            
-                            burgerMachine.use(order);
-            
-                            Thread.sleep(Utility.MakingBurgerTime);
+                currentMilliSecond = System.currentTimeMillis();
+                if (order.getFriesNumber() > 0) {
+                    if (!friesMachine.isUsing()) {
+                        long startMilliSecond = currentMilliSecond + (Utility.MakingFriesTime * order.getFriesNumber());
+                        friesMachine.setExpectedFinishTime(Utility.calculateTime(startMilliSecond));
+                        makeFries();                
+                    } else {
+                        if (Utility.calculateTime(currentMilliSecond).equals(friesMachine.getExpectedFinishTime())) {   
+                            synchronized (friesMachine) {
+                                friesMachine.wait();
+                            }
+                            makeFries(); 
                         }
-                        burgerMachine.release();
-                        
-                        synchronized (Utility.MachineBusy){
-                            Utility.MachineBusy.notifyAll();
-                        }
-                                                
                     }
                 }
-                                              
-                synchronized(friesMachine) {
 
-                    if (!friesMachine.isUsing() && order.getFriesNumber() > 0) {
-
-                        while (order.getFriesNumber() > 0) {
-
-                            System.out.println(String.format(
-                                "%s - Cook %s uses the fries machine.", 
-                                Utility.calculateTime(), 
-                                cook.getId()));   
-
-                            friesMachine.use(order);
-
-                            Thread.sleep(Utility.MakingFriesTime);
-                                                
+                currentMilliSecond = System.currentTimeMillis();
+                if (order.getCokeNumber() > 0) {
+                    if (!cokeMachine.isUsing()) {
+                        long startMilliSecond = currentMilliSecond + (Utility.MakingCokeTime * order.getCokeNumber());
+                        cokeMachine.setExpectedFinishTime(Utility.calculateTime(startMilliSecond));                     
+                        makeCoke();        
+                    } else {
+                        if (Utility.calculateTime(currentMilliSecond).equals(cokeMachine.getExpectedFinishTime())) {   
+                            synchronized (cokeMachine) {
+                                cokeMachine.wait();
+                            }
+                            makeCoke();                             
                         }
-                        friesMachine.release();
-                        
-                        synchronized (Utility.MachineBusy){
-                            Utility.MachineBusy.notifyAll();
-                        }                        
-                        
                     }
                 }
-                                                        
 
-                synchronized(cokeMachine) {
-   
-                    if (!cokeMachine.isUsing() && order.getCokeNumber() > 0) {
 
-                        while (order.getCokeNumber() > 0) {
-
-                            System.out.println(String.format(
-                                "%s - Cook %s uses the coke machine.", 
-                                Utility.calculateTime(), 
-                                cook.getId()));   
-
-                            cokeMachine.use(order);
-
-                            Thread.sleep(Utility.MakingCokeTime);                      
-                        }
-                        cokeMachine.release();
-                        
-                        synchronized (Utility.MachineBusy){
-                            Utility.MachineBusy.notifyAll();
-                        }
-                                            
-                    }
-                }
-               
                 // finish order
                 synchronized (eater) {
-
-                    total = order.getBurgersNumber() 
-                        + order.getFriesNumber() 
-                        + order.getCokeNumber();
+                    total = order.getBurgersNumber() + order.getFriesNumber() + order.getCokeNumber();
                     if (total == 0) {
                         eater.notify();
-                        
                     }
                 }
             }
 
-        } catch (InterruptedException ex) {
+        } catch (final InterruptedException ex) {
             ex.printStackTrace();
         }
-
     }
+
+    private void makeBurger() {
+        try {
+            while (order.getBurgersNumber() > 0) {
+                System.out.println(String.format("%s - Cook %s uses the burger machine.",
+                        Utility.calculateTime(), cook.getId()));
+
+                burgerMachine.use(order);
+
+                Thread.sleep(Utility.MakingBurgerTime);
+            }
+            burgerMachine.release();
+
+            synchronized (burgerMachine) {
+                burgerMachine.notifyAll();
+            }
+        } catch (final InterruptedException ex) {
+            ex.printStackTrace();
+        }        
+    }
+
+    private void makeFries() {
+        try {
+            while (order.getFriesNumber() > 0) {
+
+                System.out.println(String.format("%s - Cook %s uses the fries machine.",
+                        Utility.calculateTime(), cook.getId()));
+
+                friesMachine.use(order);                       
+
+                Thread.sleep(Utility.MakingFriesTime);
+            }
+
+            friesMachine.release();
+            synchronized (friesMachine) {
+                friesMachine.notifyAll();
+            } 
+        } catch (final InterruptedException ex) {
+            ex.printStackTrace();
+        }        
+    }
+
+    private void makeCoke() {
+        try {
+            while (order.getCokeNumber() > 0) {
+
+                System.out.println(String.format("%s - Cook %s uses the coke machine.", 
+                    Utility.calculateTime(), cook.getId()));
+
+                cokeMachine.use(order);                       
+
+                Thread.sleep(Utility.MakingCokeTime);
+            }
+            cokeMachine.release();
+            synchronized (cokeMachine) {
+                cokeMachine.notifyAll();
+            }
+        } catch (final InterruptedException ex) {
+            ex.printStackTrace();
+        }
+           
+    }
+
 }
