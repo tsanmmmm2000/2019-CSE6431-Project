@@ -33,8 +33,7 @@ public class CookThread implements Runnable {
                 Table table = order.getTable();
                 eater = table.getEater();
 
-                System.out.println(String.format("%s - Cook %s processes Diner %s's order.", Utility.calculateTime(),
-                        cook.getId(), eater.getId()));
+                Utility.printTakeLog(cook, eater);
             }
         } catch (InterruptedException ex) {
             ex.printStackTrace();
@@ -74,11 +73,10 @@ public class CookThread implements Runnable {
 
     private void makeFood(Machine machine) {
         try {
-            String name = machine.getName();
-            while (order.getFoodNumber(name) > 0) {
+            //String name = machine.getName();
+            while (order.getFoodNumber(machine.getName()) > 0) {
 
-                System.out.println(String.format("%s - Cook %s uses the %s machine.", 
-                    Utility.calculateTime(), cook.getId(), name));
+                Utility.printUseLog(cook, machine);
 
                 machine.use(order);                       
 

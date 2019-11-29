@@ -1,18 +1,29 @@
 public class Utility {
     public final static int EatingTime = 30000;
- 
+    public final static String Burger = "burger";
+    public final static String Fries = "fries";
+    public final static String Coke = "coke";   
     public static RepositoryFactory Repository = new RepositoryFactory();
 
     private final static long beginSecond = System.currentTimeMillis() / 1000;
     private final static String timePattern = "%s:%s";
-    private static Integer currentEaterNumber = 0; 
+    private final static String arrive = "%s - Diner %s arrives.";
+    private final static String seat = "%s - Diner %s is seated at table %s.";
+    private final static String eat = "%s - Diner %s's order is ready. Diner %s starts eating.";
+    private final static String leave = "%s - Diner %s finishes. Diner %s leaves the restaurant.";
+    private final static String finish = "%s - The last diner leaves the restaurant.";
+    private final static String take = "%s - Cook %s processes Diner %s's order.";
+    private final static String use = "%s - Cook %s uses the %s machine.";
+    private static Integer currentEatersNumber = 0; 
 
-    public static void setCurrentEaterNumber(int number) {
-        currentEaterNumber = number;
+    public static void setCurrentEatersNumber(int number) {
+        currentEatersNumber = number;
     }
-    public static Integer getCurrentEaterNumber() {
-        return currentEaterNumber;
+
+    public static Integer getCurrentEatersNumber() {
+        return currentEatersNumber;
     }
+    
     public static String calculateTime(long startMilliSecond) {
         // assume the maximum time of this program is 59:59
         long startSecond = startMilliSecond / 1000;
@@ -40,4 +51,38 @@ public class Utility {
     public static String calculateTime() {
         return calculateTime(System.currentTimeMillis());
     }
+
+    public static void printArriveLog(Eater eater) {
+        System.out.println(String.format(arrive, calculateTime(), eater.getId()));
+    }
+
+    public static void printSeatLog(Table table) {
+        System.out.println(String.format(seat, 
+            calculateTime(), table.getEater().getId(), table.getId()));       
+    }
+
+    public static void printEatLog(Eater eater) {
+        System.out.println(String.format(eat,
+            calculateTime(), eater.getId(), eater.getId()));       
+    }
+
+    public static void printLeaveLog(Eater eater) {
+        System.out.println(String.format(leave, 
+            calculateTime(), eater.getId(), eater.getId()));       
+    }
+
+    public static void printFinishLog() {
+        System.out.println(String.format(finish, calculateTime()));        
+    }
+
+    public static void printTakeLog(Cook cook, Eater eater) {
+        System.out.println(String.format(take, 
+            calculateTime(), cook.getId(), eater.getId()));
+    }
+
+    public static void printUseLog(Cook cook, Machine machine) {
+        System.out.println(String.format(use, 
+            calculateTime(), cook.getId(), machine.getName()));
+    }    
+
 }

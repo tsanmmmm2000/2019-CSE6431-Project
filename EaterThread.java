@@ -23,8 +23,7 @@ public class EaterThread implements Runnable {
     }
     
     private void arrive() {
-        System.out.println(String.format(
-            "%s - Diner %s arrives.", Utility.calculateTime(), eater.getId()));
+        Utility.printArriveLog(eater);
     }
 
     private void seat() {
@@ -38,11 +37,7 @@ public class EaterThread implements Runnable {
                 table = tableService.getAvailableTable();
                 tableService.assignTable(table, eater);
 
-                System.out.println(String.format(
-                    "%s - Diner %s is seated at table %s.", 
-                    Utility.calculateTime(),
-                    table.getEater().getId(), 
-                    table.getId()));
+                Utility.printSeatLog(table);
             }
 
             // add order
@@ -62,11 +57,7 @@ public class EaterThread implements Runnable {
                 eater.wait(); 
 
                 // eating
-                System.out.println(String.format(
-                    "%s - Diner %s's order is ready. Diner %s starts eating.", 
-                    Utility.calculateTime(),
-                    eater.getId(),
-                    eater.getId()));
+                Utility.printEatLog(eater);
 
                 Thread.sleep(Utility.EatingTime);
             }
@@ -79,27 +70,20 @@ public class EaterThread implements Runnable {
     private void leave() {
         // release table
         synchronized (tableService.getTables()) {
-
-            System.out.println(String.format(
-                "%s - Diner %s finishes. Diner %s leaves the restaurant.",
-                Utility.calculateTime(),
-                eater.getId(),
-                eater.getId()));
-
+            Utility.printLeaveLog(eater);
             tableService.releaseTable(table);
             tableService.getTables().notify();
         }
 
-        synchronized (Utility.getCurrentEaterNumber()) {
-            Utility.setCurrentEaterNumber(Utility.getCurrentEaterNumber() - 1);
+        synchronized (Utility.getCurrentEatersNumber()) {
+            Utility.setCurrentEatersNumber(Utility.getCurrentEatersNumber() - 1);
         }
     }
 
     private void finish() {
-        synchronized(Utility.getCurrentEaterNumber()) {
-            if (Utility.getCurrentEaterNumber() == 0) {
-                System.out.println(String.format(
-                    "%s - The last diner leaves the restaurant.", Utility.calculateTime()));
+        synchronized(Utility.getCurrentEatersNumber()) {
+            if (Utility.getCurrentEatersNumber() == 0) {
+                Utility.printFinishLog();
                 System.exit(0);
             }
         }

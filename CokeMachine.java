@@ -1,7 +1,6 @@
 public class CokeMachine extends BaseMachine {
 
     private final int MakingCokeTime = 1000;
-    private final String Coke = "coke";
 
     @Override
     public int getMakingTime() {
@@ -10,6 +9,6 @@ public class CokeMachine extends BaseMachine {
 
     @Override
     public String getName() {
-        return Coke;
+        return Utility.Coke;
     }
 }
