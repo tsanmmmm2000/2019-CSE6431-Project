@@ -15,15 +15,10 @@ javac -d . *.java
 Execute the program:
 
 ```
-java Main <input file name>
+java Main <input file absolute path>
 ```
 
 Example:
 ```
 java Main "D:\OSU\AU19\OS\project\project-sample-input-1.txt"
-```
-
-If the input file is located at the same directory as *Main.java*, we can simply execute:
-```
-java Main "project-sample-input-1.txt"
 ```
