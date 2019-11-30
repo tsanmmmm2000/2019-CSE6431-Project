@@ -1,4 +1,8 @@
+package restaurant;
 import java.util.*;
+import restaurant.machine.*;
+import restaurant.machine.impl.*;
+import restaurant.service.*;
 
 public class RepositoryFactory {
     

@@ -1,3 +1,5 @@
+package restaurant.domain;
+
 public class Cook {
     private int id;
 

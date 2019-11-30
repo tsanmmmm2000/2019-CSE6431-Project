@@ -1,3 +1,7 @@
+package restaurant.machine.impl;
+import restaurant.machine.*;
+import restaurant.domain.*;
+
 public abstract class BaseMachine implements Machine{
    
     protected boolean isUsing = false;
@@ -5,7 +9,6 @@ public abstract class BaseMachine implements Machine{
 
     public abstract int getMakingTime();
     public abstract String getName();
-    //public abstract void use(Order order);
 
     public void use(Order order) {
         isUsing = true;

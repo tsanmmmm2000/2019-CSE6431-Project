@@ -1,3 +1,6 @@
+package restaurant.machine;
+import restaurant.domain.*;
+
 public interface Machine {  
     int getMakingTime();
     String getName(); 

@@ -1,3 +1,7 @@
+import restaurant.*;
+import restaurant.domain.*;
+import restaurant.service.*;
+
 public class EaterThread implements Runnable {
     
     private Eater eater;

@@ -1,4 +1,8 @@
 import java.util.*;
+import restaurant.*;
+import restaurant.domain.*;
+import restaurant.service.*;
+import restaurant.machine.*;
 
 public class CookThread implements Runnable {
 
@@ -51,10 +55,9 @@ public class CookThread implements Runnable {
     private void handleOrder(Machine machine) {
         try {
             long currentMilliSecond = System.currentTimeMillis();
-            String name = machine.getName();
-            if (order.getFoodNumber(name) > 0) {
+            if (order.getFoodNumber(machine.getName()) > 0) {
                 if (!machine.isUsing()) {
-                    long startMilliSecond = currentMilliSecond + (machine.getMakingTime() * order.getFoodNumber(name));
+                    long startMilliSecond = currentMilliSecond + (machine.getMakingTime() * order.getFoodNumber(machine.getName()));
                     machine.setExpectedFinishTime(Utility.calculateTime(startMilliSecond));                     
                     makeFood(machine);        
                 } else {
@@ -73,7 +76,6 @@ public class CookThread implements Runnable {
 
     private void makeFood(Machine machine) {
         try {
-            //String name = machine.getName();
             while (order.getFoodNumber(machine.getName()) > 0) {
 
                 Utility.printUseLog(cook, machine);

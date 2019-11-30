@@ -1,3 +1,4 @@
+package restaurant.domain;
 import java.util.*;
 
 public class Order {

@@ -1,3 +1,6 @@
+package restaurant.machine.impl;
+import restaurant.*;
+
 public class BurgerMachine extends BaseMachine {
 
     private final int MakingBurgerTime = 5000;

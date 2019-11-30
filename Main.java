@@ -1,5 +1,8 @@
 import java.util.*;
-import java.io.*; 
+import java.io.*;
+import restaurant.*;
+import restaurant.domain.*;
+import restaurant.service.*;
 
 public class Main {
 
@@ -9,7 +12,7 @@ public class Main {
 
     public static void main(String args[]) {
 
-        if(args.length <= 0) return;
+        if (args.length <= 0) return;
 
         prepareParameters(args);
 
@@ -44,7 +47,7 @@ public class Main {
             reader = new BufferedReader(new FileReader(file)); 
 
             // init role number
-            // line order: number of eaters, number of tables, number of cooks
+            // line is order by: number of eaters, number of tables, number of cooks
             // ex:
             // 3
             // 2
@@ -54,7 +57,7 @@ public class Main {
             int cooksNumber = Integer.parseInt(reader.readLine().trim());
 
             // init eater and order
-            // in order: eater arrived time, number of burgers, number of fries, number of coke
+            // order by: eater arrived time, number of burgers, number of fries, number of coke
             // ex: 5,1,1,1
             Utility.setCurrentEatersNumber(eatersNumber);
             for (int i = 1; i <= eatersNumber; i++) {

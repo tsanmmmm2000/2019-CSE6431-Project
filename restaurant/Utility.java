@@ -1,3 +1,7 @@
+package restaurant;
+import restaurant.domain.*;
+import restaurant.machine.*;
+
 public class Utility {
     public final static int EatingTime = 30000;
     public final static String Burger = "burger";

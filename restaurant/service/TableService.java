@@ -1,4 +1,7 @@
+package restaurant.service;
 import java.util.*;
+import restaurant.domain.*;
+
 public class TableService {
     
     private List<Table> tables = new ArrayList<Table>();

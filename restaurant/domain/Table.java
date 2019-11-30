@@ -1,10 +1,7 @@
-enum TableStatus 
-{ 
-    Available,
-    UnAvailable; 
-} 
+package restaurant.domain;
 
 public class Table {
+
     private int id;
     private TableStatus status;
     private Eater eater;

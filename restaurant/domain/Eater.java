@@ -1,3 +1,5 @@
+package restaurant.domain;
+
 public class Eater {
     private int id;
     private int arrivedTime;

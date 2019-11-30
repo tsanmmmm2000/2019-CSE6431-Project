@@ -1,4 +1,7 @@
+package restaurant.service;
 import java.util.*;
+import restaurant.domain.*;
+
 public class OrderService {
     private List<Order> orders = new ArrayList<Order>();
 
