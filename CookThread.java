@@ -1,5 +1,4 @@
 import java.util.*;
-import restaurant.*;
 import restaurant.domain.*;
 import restaurant.service.*;
 import restaurant.machine.*;

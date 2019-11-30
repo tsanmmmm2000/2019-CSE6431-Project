@@ -1,17 +1,17 @@
 package restaurant.machine.impl;
-import restaurant.*;
 
 public class BurgerMachine extends BaseMachine {
 
-    private final int MakingBurgerTime = 5000;
+    private final int makingBurgerTime = 5000;
+    private final String burger = "burger";
 
     @Override
     public int getMakingTime() {
-        return MakingBurgerTime;
+        return makingBurgerTime;
     }
 
     @Override
     public String getName() {
-        return Utility.Burger;
+        return burger;
     }
 }

@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
-import restaurant.*;
 import restaurant.domain.*;
+import restaurant.machine.*;
 import restaurant.service.*;
 
 public class Main {
@@ -56,9 +56,16 @@ public class Main {
             int tablesNumber = Integer.parseInt(reader.readLine().trim());
             int cooksNumber = Integer.parseInt(reader.readLine().trim());
 
+            // get food name which is the same as machine identity name
+            // instances place by order: BurgerMachine, FriesMachine, CokeMachine
+            List<Machine> machines = Utility.Repository.getMachines();
+            String burger = machines.get(0).getName();
+            String fries = machines.get(1).getName();
+            String coke = machines.get(2).getName();
+
             // init eater and order
             // order by: eater arrived time, number of burgers, number of fries, number of coke
-            // ex: 5,1,1,1
+            // ex: 5,1,1,1          
             Utility.setCurrentEatersNumber(eatersNumber);
             for (int i = 1; i <= eatersNumber; i++) {
                 
@@ -74,9 +81,9 @@ public class Main {
                 int friesNumber = Integer.parseInt(numbers[2].trim());
                 int cokeNumber = Integer.parseInt(numbers[3].trim());
                 HashMap<String, Integer> food = new HashMap<String, Integer>();
-                food.put(Utility.Burger, burgersNumber);
-                food.put(Utility.Fries, friesNumber);
-                food.put(Utility.Coke, cokeNumber);
+                food.put(burger, burgersNumber);
+                food.put(fries, friesNumber);
+                food.put(coke, cokeNumber);
                 orders.add(new Order(food));
             }
 

@@ -1,12 +1,8 @@
-package restaurant;
 import restaurant.domain.*;
 import restaurant.machine.*;
 
 public class Utility {
-    public final static int EatingTime = 30000;
-    public final static String Burger = "burger";
-    public final static String Fries = "fries";
-    public final static String Coke = "coke";   
+    public final static int EatingTime = 30000;  
     public static RepositoryFactory Repository = new RepositoryFactory();
 
     private final static long beginSecond = System.currentTimeMillis() / 1000;

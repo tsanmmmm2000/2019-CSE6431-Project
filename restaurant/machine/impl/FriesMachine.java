@@ -1,17 +1,17 @@
 package restaurant.machine.impl;
-import restaurant.*;
 
 public class FriesMachine extends BaseMachine {
 
-    private final int MakingFriesTime = 3000;
+    private final int makingFriesTime = 3000;
+    private final String fries = "fries";    
 
     @Override
     public int getMakingTime() {
-        return MakingFriesTime;
+        return makingFriesTime;
     }
 
     @Override
     public String getName() {
-        return Utility.Fries;
+        return fries;
     }
 }
